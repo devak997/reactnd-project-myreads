@@ -16,10 +16,9 @@ class BooksApp extends React.Component {
   }
 
 
-  getAllBooks = () => {
-    BooksAPI.getAll().then(res => {
-      this.setState({ books: res });
-    });
+  getAllBooks = async () => {
+    const books = await BooksAPI.getAll();
+    this.setState({books});
   }
 
   updateBookShelf = (bookID, newShelf) => {
@@ -30,9 +29,11 @@ class BooksApp extends React.Component {
 
 
   render() {
-    const wantToReadBooks = this.state.books.filter(book => book.shelf === 'wantToRead');
-    const currentlyReadingBooks = this.state.books.filter(book => book.shelf === 'currentlyReading');
-    const readBooks = this.state.books.filter(book => book.shelf === 'read');
+    const filter = books => shelf => books.filter(book => book.shelf === shelf);
+    const filterBy = filter(this.state.books);
+    const wantToReadBooks = filterBy('wantToRead');
+    const currentlyReadingBooks = filterBy('currentlyReading');
+    const readBooks = filterBy('read')
     return (
       <div className="app">
         <Route exact path='/' render={() => <MainPage wantToReadBooks={wantToReadBooks} currentlyReadingBooks={currentlyReadingBooks} readBooks={readBooks} onSelect={this.updateBookShelf} />} />
