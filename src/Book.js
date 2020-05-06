@@ -2,7 +2,7 @@ import React from 'react';
 
 const Book = props => {
     const { title, authors, shelf } = props.book
-    const url = props.book.imageLinks.thumbnail
+    const url = props.book.imageLinks ? props.book.imageLinks.thumbnail : '';
     return (
         <div className="book">
             <div className="book-top">
