@@ -8,15 +8,18 @@ class SearchPage extends Component {
     state = { results: [] }
 
     handleInputChange = e => {
-        this.props.handleSearch(e.target.value)
+        const query = e.target.value;
+        this.props.handleSearch(query)
             .then(res => {
-                if (!res.error) {
+                if (res && !res.error) {
                     res = res.map(resBook => {
                         const existed = this.props.currentBooks.find(currentBook => currentBook.id === resBook.id);
                         if (existed) return existed;
                         return resBook;
                     });
                     this.setState({ results: res });
+                } else {
+                    this.setState({results: []});
                 }
             })
             .catch(err => console.log(err));
